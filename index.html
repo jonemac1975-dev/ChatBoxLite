@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="utf-8" />
@@ -7,54 +8,47 @@
 </head>
 <body>
 <div class="app">
-<aside class="sidebar">
-<div class="logo-wrap">
-<img src="assets/img/logo.png" alt="logo" class="logo">
-<h2>ChatBoxLite</h2>
+  <aside class="sidebar">
+    <div class="logo-wrap">
+      <img src="assets/img/logo.png" alt="logo" class="logo">
+      <h2>ChatBoxLite</h2>
+    </div>
+
+    <nav class="nav-list">
+      <button id="newChat">+ New chat</button>
+      <button id="clearChats">🧹 Clear history</button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="themeToggle">🌙</button>
+      <a href="setup.html" class="settings-link">Settings</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="main-header">
+      <div class="title">AI Chat — <span id="modelLabel">loading</span></div>
+      <div class="header-actions">
+        <button id="btnUpload">📎</button>
+        <input id="fileInput" type="file" style="display:none;" />
+        <button id="btnSettings">⚙️</button>
+      </div>
+    </header>
+
+    <section id="chatArea" class="chat-area">
+      <div id="messages" class="messages"></div>
+    </section>
+
+    <footer class="composer">
+      <textarea id="input" placeholder="Gõ tin nhắn... (Shift+Enter để xuống dòng)"></textarea>
+      <div class="composer-actions">
+        <button id="send">Gửi</button>
+      </div>
+    </footer>
+  </main>
 </div>
-
-
-<nav class="nav-list">
-<button id="newChat">+ New chat</button>
-<button id="clearChats">🧹 Clear history</button>
-</nav>
-
-
-<div class="sidebar-footer">
-<button id="themeToggle">🌙</button>
-<a href="setup.html" class="settings-link">Settings</a>
-</div>
-</aside>
-
-
-<main class="main">
-<header class="main-header">
-<div class="title">AI Chat — <span id="modelLabel">loading</span></div>
-<div class="header-actions">
-<button id="btnUpload">📎</button>
-<input id="fileInput" type="file" style="display:none;" />
-<button id="btnSettings">⚙️</button>
-</div>
-</header>
-
-
-<section id="chatArea" class="chat-area">
-<div id="messages" class="messages"></div>
-</section>
-
-
-<footer class="composer">
-<textarea id="input" placeholder="Gõ tin nhắn... (Shift+Enter để xuống dòng)"></textarea>
-<div class="composer-actions">
-<button id="send">Gửi</button>
-</div>
-</footer>
-</main>
-</div>
-
 
 <div id="toast" class="toast" style="display:none"></div>
-
 
 <script src="config/settings.js"></script>
 <script src="js/ui.js"></script>
