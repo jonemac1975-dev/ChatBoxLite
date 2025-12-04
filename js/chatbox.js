@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatInput = document.getElementById("input");
   const sendBtn = document.getElementById("send");
 
-  const WORKER_URL = "https://bold-firefly-c9fc.jonemac1975.workers.dev/";
+  const WORKER_URL = "https://bold-firefly-c9fc.jonemac1975.workers.dev/"; // URL Worker
 
   if (!chatBody || !chatInput || !sendBtn) {
     console.error("❌ Lỗi: ID trong HTML không tồn tại!");
@@ -40,16 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
     appendTyping();
 
     try {
-      const res = await fetch(WORKER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [{ role: "user", content: text }] })
-      });
+      const res = await fetch("https://bold-firefly-c9fc.jonemac1975.workers.dev/", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ messages: [{ role: "user", content: text }] })
+});
 
       console.log("Fetch status:", res.status);
 
       const data = await res.json();
-      console.log("API raw data:", data);
+      console.log("API raw data:", JSON.stringify(data, null, 2));
 
       removeTyping();
 
