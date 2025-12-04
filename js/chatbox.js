@@ -1,5 +1,6 @@
 // =======================================
-//           CHATBOX.JS (FULL FIXED)
+//           CHATBOX.JS (FINAL VERSION)
+//     Dùng Cloudflare Worker làm proxy
 // =======================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -42,35 +43,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const text = chatInput.value.trim();
         if (!text) return;
 
-        const apiKey = localStorage.getItem("CHATBOX_API_KEY");
-        if (!apiKey) {
-            alert("Bạn chưa nhập API key — chuyển sang trang setup.");
-            window.location.href = "setup.html";
-            return;
-        }
-
         appendMessage("user", text);
         chatInput.value = "";
         appendTyping();
 
         try {
-            const res = await fetch("https://api.openai.com/v1/responses", {
+            const res = await fetch("https://bold-firefly-c9fc.jonemac1975.workers.dev/", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + apiKey
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    model: "gpt-4.1-mini",
-                    input: text
+                    prompt: text   // Worker nhận JSON { prompt: "..." }
                 })
             });
 
             const data = await res.json();
             removeTyping();
 
-            const botReply = data.output_text || "⚠️ Không nhận được trả lời từ AI.";
-            appendMessage("bot", botReply);
+            if (!data.reply) {
+                appendMessage("bot", "⚠️ Không nhận được trả lời từ AI.");
+                return;
+            }
+
+            appendMessage("bot", data.reply);
 
         } catch (error) {
             console.error("API Error:", error);
