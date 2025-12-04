@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Setup API Key</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="setup-page">
+<div class="setup-box">
+<img src="assets/img/logo.png" alt="logo" class="logo big">
+<h1>Thiết lập API Key</h1>
+<p>Dán OpenAI API Key (sk-...)</p>
+<input id="key" type="password" placeholder="sk-..." />
+<div class="row">
+<button id="saveKey">Lưu</button>
+<button id="clearKey">Xóa</button>
+</div>
+<p class="note">Key được lưu trong localStorage trên trình duyệt này.</p>
+</div>
+
+
+<script>
+document.getElementById('saveKey').addEventListener('click', ()=>{
+const v = document.getElementById('key').value.trim();
+if(!v){ alert('Nhập key đã nhé'); return; }
+localStorage.setItem('CHATBOX_API_KEY', v);
+alert('Đã lưu. Mở index.html để dùng.');
+location.href = 'index.html';
+});
+document.getElementById('clearKey').addEventListener('click', ()=>{
+localStorage.removeItem('CHATBOX_API_KEY');
+alert('Đã xóa key.');
+});
+
+
+// show existing
+const existing = localStorage.getItem('CHATBOX_API_KEY');
+if(existing) document.getElementById('key').value = existing;
+</script>
+</body>
+</html>
