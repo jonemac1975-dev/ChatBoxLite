@@ -3,15 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatInput = document.getElementById("input");
   const sendBtn = document.getElementById("send");
 
-  // URL Worker của bạn
   const WORKER_URL = "https://bold-firefly-c9fc.jonemac1975.workers.dev/";
 
   if (!chatBody || !chatInput || !sendBtn) {
-    console.error("❌ LỖI: ID trong HTML không tồn tại!");
+    console.error("❌ Lỗi: ID trong HTML không tồn tại!");
     return;
   }
 
-  // Hiển thị tin nhắn
   function appendMessage(role, text) {
     const msg = document.createElement("div");
     msg.className = `msg ${role}`;
@@ -20,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // Hiển thị đang trả lời
   function appendTyping() {
     const msg = document.createElement("div");
     msg.className = "msg bot typing";
@@ -34,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typing) typing.remove();
   }
 
-  // Gửi tin nhắn
   async function sendMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
@@ -57,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       removeTyping();
 
-      // Lấy reply từ Worker
       const reply = data?.reply || "⚠️ Không nhận được trả lời từ AI.";
       appendMessage("bot", reply);
 
@@ -68,15 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Enter gửi, Shift+Enter xuống dòng
   chatInput.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Ngăn xuống dòng
-      sendMessage();      // Gửi tin nhắn
+      e.preventDefault();
+      sendMessage();
     }
-    // Shift+Enter → xuống dòng bình thường
   });
 
-  // Click button gửi
   sendBtn.addEventListener("click", sendMessage);
 });
