@@ -3,48 +3,83 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>ChatBoxLite</title>
+<title>ChatBox 4.1 — Jonemac</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
 <div class="app">
+<!-- LOGO MOBILE TRÊN CÙNG -->
+<div class="mobile-logo">
+  <img src="assets/logo.png" alt="logo">
+  <h2>ChatBox Jonemac</h2>
+</div>
+
+  <!-- SIDEBAR -->
   <aside class="sidebar">
+    
     <div class="logo-wrap">
-      <img src="assets/img/logo.png" alt="logo" class="logo">
-      <h2>ChatBoxLite</h2>
+      <img src="assets/logo.png" alt="logo" class="logo">
+      <h2>ChatBox Jonemac</h2>
     </div>
+
     <nav class="nav-list">
-      <button id="newChat">+ New chat</button>
-      <button id="clearChats">🧹 Clear history</button>
+      <button id="newChat">+ New Chat</button>
+      <button id="clearChats">🧹 Clear History</button>
+      <button id="toggleTheme">🌗 Dark / Light</button>
+
+      <!-- SESSIONS LIST (đã đặt đúng vị trí) -->
+      <div id="sessionsList" class="sessions-list"></div>
     </nav>
-    <div class="sidebar-footer">
-      <button id="themeToggle">🌙</button>
-      <a href="setup.html" class="settings-link">Settings</a>
-    </div>
+
   </aside>
+
+  <!-- MAIN -->
   <main class="main">
-    <header class="main-header">
-      <div class="title">AI Chat — <span id="modelLabel">loading</span></div>
-      <div class="header-actions">
-        <button id="btnUpload">📎</button>
-        <input id="fileInput" type="file" style="display:none;" />
-        <button id="btnSettings">⚙️</button>
+      <header class="main-header">
+      <div class="title">
+        AI Chat — <span id="modelLabel">gpt</span>
+<div class="model-select">
+  <label for="modelSelect">Model:</label>
+  <select id="modelSelect">
+    <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+    <option value="gpt-4.1">gpt-4.1</option>
+    <option value="gpt-5-mini">gpt-5-mini</option>
+    <option value="gpt-5">gpt-5</option>
+  </select>
+</div>
+
       </div>
     </header>
+
     <section id="chatArea" class="chat-area">
       <div id="messages" class="messages"></div>
     </section>
+
+    <!-- Composer -->
     <footer class="composer">
       <textarea id="input" placeholder="Gõ tin nhắn... (Shift+Enter để xuống dòng)"></textarea>
+      
       <div class="composer-actions">
+        <button id="btnFile">📎</button>
+        <input id="fileInput" type="file" style="display:none;" />
         <button id="send">Gửi</button>
       </div>
     </footer>
+
   </main>
+
 </div>
+
+<!-- Toast notification -->
 <div id="toast" class="toast" style="display:none"></div>
-<script src="config/settings.js"></script>
-<script src="js/ui.js"></script>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+
+<!-- Main JS -->
 <script src="js/chatbox.js"></script>
+
 </body>
 </html>
