@@ -12,8 +12,10 @@
   --msg-bot-bg: #ffffff;
   --msg-bot-text: #222;
 
-  --header-bg: #f3f3f3;     /* Header chat nhạt hơn một chút */
-  --sidebar-bg: #fafafa;    /* Sidebar nhạt hơn desktop chat area */
+  --header-bg: #f3f3f3;
+  --sidebar-bg: #fafafa;
+
+  --mobile-logo-h: 56px; /* chiều cao logo mobile */
 }
 
 .dark {
@@ -35,19 +37,19 @@
 body {
   background: var(--bg);
   color: var(--text);
-}
-
-/* ================== APP ================== */
-html, body {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+html, body {
   height: 100%;
 }
 
+/* ================== APP ================== */
 .app {
   display: flex;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
 }
 
 /* ================== SIDEBAR ================== */
@@ -60,9 +62,21 @@ html, body {
   flex-direction: column;
 }
 
-.logo { width: 60px; height: auto; }
-.logo-wrap { display: flex; align-items: center; gap: 12px; }
-.logo-wrap h2 { font-size: 16px; margin: 0; }
+.logo {
+  width: 60px;
+  height: auto;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-wrap h2 {
+  font-size: 16px;
+  margin: 0;
+}
 
 .nav-list {
   margin-top: 24px;
@@ -71,12 +85,12 @@ html, body {
   gap: 8px;
 }
 
-.nav-list button { 
-  padding: 10px; 
-  border-radius: 8px; 
-  border: 1px solid var(--border-color); 
-  background: var(--card); 
-  cursor: pointer; 
+.nav-list button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card);
+  cursor: pointer;
   color: var(--text);
 }
 
@@ -96,9 +110,16 @@ html, body {
   padding: 16px;
   border-bottom: 1px solid var(--border-color);
   background: var(--header-bg);
+  white-space: nowrap;
 }
 
-.title { font-weight: 600; }
+.title {
+  font-weight: 600;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 /* ================== CHAT AREA ================== */
 .chat-area {
@@ -108,30 +129,32 @@ html, body {
   background: var(--bg);
 }
 
-.messages { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px; 
-  max-width: 900px; 
-  margin: 0 auto; 
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.msg { 
-  max-width: 72%; 
-  padding: 12px 16px; 
-  border-radius: 12px; 
-  border: 1px solid var(--border-color); 
+.msg {
+  max-width: 72%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
   word-wrap: break-word;
 }
 
-.msg.user { 
-  margin-left: auto; 
+/* User bên phải */
+.msg.user {
+  margin-left: auto;
   background: var(--msg-user-bg);
   color: var(--msg-user-text);
 }
 
-.msg.bot { 
-  margin-right: auto; 
+/* Bot bên trái */
+.msg.bot {
+  margin-right: auto;
   background: var(--msg-bot-bg);
   color: var(--msg-bot-text);
 }
@@ -183,90 +206,104 @@ textarea {
   opacity: .95;
 }
 
-/* ================== RESPONSIVE ================== */
-
-/* Desktop (>=769px) */
+/* ================== DESKTOP ================== */
 @media (min-width: 769px) {
-  .app { flex-direction: row; }
-  .sidebar {
-    width: 240px;
-    border-right: 1px solid var(--border-color);
-    border-top: none;
+  .mobile-logo {
+    display: none;
   }
-  .main { flex: 1; }
-  .mobile-logo { display: none; }
 }
 
-/* Mobile (<=768px) */
+/* ================== MOBILE ================== */
 @media (max-width: 768px) {
 
-  .app { flex-direction: column; }
+  .app {
+    flex-direction: column;
+  }
 
-  /* Logo mobile nổi trên main + shadow */
+  /* === fixed logo mobile === */
   .mobile-logo {
-    display: block;
-    text-align: center;
-    padding: 3px 0;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--mobile-logo-h);
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
     background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    margin: 2px 3px;
-    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    z-index: 10050;
   }
 
   .mobile-logo img {
-    width: 25px;
-    height: 20%;
+    width: 32px;
+    height: auto;
   }
 
-  /* MAIN lên đầu */
-  .main { order: 1; width: 100%; }
+  .mobile-logo h2 {
+    font-size: 16px;
+    white-space: nowrap;
+  }
 
-  /* Sidebar xuống dưới + ẩn */
+  /* === fixed header ngay dưới logo === */
+  .main-header {
+    position: fixed;
+    top: var(--mobile-logo-h);
+    left: 0;
+    width: 80%;
+    z-index: 10040;
+    box-sizing: border-box;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* === fixed composer dưới đáy === */
+  .composer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10045;
+    padding: 10px 12px;
+  }
+
+  .composer textarea {
+    height: 44px;
+    padding: 10px;
+  }
+
+  /* === chat-area scroll độc lập === */
+  .chat-area {
+    margin-top: calc(var(--mobile-logo-h) + 56px);
+    padding: 14px;
+    padding-bottom: 90px;
+    height: calc(100vh - (var(--mobile-logo-h) + 56px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .messages {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .msg {
+    max-width: 90%;
+  }
+
+  /* hide sidebar */
   .sidebar {
-    order: 2;
+    display: none !important;
     width: 0 !important;
     min-width: 0 !important;
     padding: 0 !important;
     border: none !important;
   }
-
   .sidebar .logo-wrap,
-  .sidebar .nav-list { display: none !important; }
-
-  /* Messages full width */
-  .messages { max-width: 100%; padding: 0 12px; }
-  .msg { max-width: 90%; }
-}
-
-
-
-    min-width: 0 !important;
-    padding: 0 !important;
-    border: none !important;
+  .sidebar .nav-list {
+    display: none !important;
   }
-  .sidebar .logo-wrap,
-  .sidebar .nav-list { display: none !important; }
-
-  /* Messages full width */
-  .messages { max-width: 100%; padding: 0 12px; }
-  .msg { max-width: 90%; }
 }
-
-  .sidebar .logo-wrap,
-  .sidebar .nav-list { display: none !important; }
-
-  /* Messages full width */
-  .messages { max-width: 100%; padding: 0 12px; }
-  .msg { max-width: 90%; }
-}
-
-  .sidebar .logo-wrap,
-  .sidebar .nav-list { display: none !important; }
-
-  /* Messages full width */
-  .messages { max-width: 100%; padding: 0 12px; }
-  .msg { max-width: 90%; }
-}
-
-
