@@ -162,20 +162,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // Append message
   // -------------------------
   function appendMessage(role, text, save = true) {
-
-    // FIX: chuẩn hóa role khi render lại lịch sử
-    const apiRole = role === "assistant" || role === "system" ? "assistant" : "user"; // FIX
-    const uiRole = apiRole === "assistant" ? "bot" : "user"; // FIX
+    const apiRole = role === "assistant" || role === "system" ? "assistant" : "user";
+    const uiRole = apiRole === "assistant" ? "bot" : "user";
 
     const msg = document.createElement("div");
     msg.className = `msg ${uiRole}`;
 
-    const safe = String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+    // Nếu là text thuần thì escape, còn HTML (như img) giữ nguyên
+    if (typeof text === "string") {
+      const safe = String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      msg.innerHTML = safe.replace(/\r/g, "").replace(/\n/g, "<br>");
+    } else {
+      // text là node (img/div) => append trực tiếp
+      msg.appendChild(text);
+    }
 
-    msg.innerHTML = safe.replace(/\r/g, "").replace(/\n/g, "<br>");
     chatBody.appendChild(msg);
     chatBody.scrollTop = chatBody.scrollHeight;
 
@@ -183,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const session = getCurrentSession();
       if (!session) return;
 
-      session.messages.push({ role: apiRole, content: text });
+      session.messages.push({ role: apiRole, content: typeof text === "string" ? text : "[media]" });
       session.updatedAt = Date.now();
 
       if ((!session.title || session.title === "Chat mới") && session.messages.length) {
@@ -218,12 +222,50 @@ document.addEventListener("DOMContentLoaded", () => {
   // File processing
   //--------------------------
   async function processFile(file) {
-    const ext = file.name.split(".").pop().toLowerCase();
-    if (ext === "pdf") return `📄 PDF: ${file.name} (nội dung đọc)`;
-    if (ext === "docx") return `📘 DOCX: ${file.name} (nội dung đọc)`;
-    if (["png", "jpg", "jpeg", "bmp", "webp"].includes(ext))
-      return `🖼 Ảnh: ${file.name} (OCR)`;
-    return `[File gửi: ${file.name}]`;
+    // Ảnh
+    if (file.type.startsWith("image/")) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.style.maxWidth = "200px";
+          img.style.borderRadius = "8px";
+
+          appendMessage("user", img);
+
+          resolve(`[image: ${file.name}]`);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // PDF
+    if (file.type === "application/pdf") {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          const typedarray = new Uint8Array(e.target.result);
+          const pdf = await pdfjsLib.getDocument(typedarray).promise;
+          let pdfText = "";
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            pdfText += textContent.items.map(item => item.str).join(" ") + "\n\n";
+          }
+
+          appendMessage("user", `[PDF: ${file.name}]\n` + pdfText);
+
+          resolve(pdfText);
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    // File khác
+    appendMessage("user", `[file gửi: ${file.name}]`);
+    return `[file gửi: ${file.name}]`;
   }
 
   // -------------------------
@@ -236,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = contentOverride ?? chatInput.value.trim();
     if (!text) return;
 
-    appendMessage("user", text, true);
+    if (!contentOverride) appendMessage("user", text, true);
     chatInput.value = "";
     appendTyping();
 
@@ -285,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // FIX: render lại với role gốc (assistant/user)
     s.messages.forEach(m => {
-      appendMessage(m.role, m.content, false); // FIX
+      appendMessage(m.role, m.content, false);
     });
 
     renderSessionsList();
@@ -352,13 +394,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (btnFile && fileInput) {
     btnFile.addEventListener("click", () => fileInput.click());
+
     fileInput.addEventListener("change", async e => {
       const file = e.target.files[0];
       if (!file) return;
 
-      appendMessage("user", `[Đang đọc file: ${file.name}]`, true);
-
-      const content = await processFile(file);
+      const content = await processFile(file); // trả text hoặc reference cho AI
       sendMessage(content);
 
       fileInput.value = "";
