@@ -63,7 +63,7 @@ html, body {
 }
 
 .logo {
-  width: 60px;
+  width: 100px;
   height: auto;
 }
 
@@ -239,7 +239,7 @@ textarea {
   }
 
   .mobile-logo img {
-    width: 32px;
+    width: 50px;
     height: auto;
   }
 
@@ -253,7 +253,7 @@ textarea {
     position: fixed;
     top: var(--mobile-logo-h);
     left: 0;
-    width: 80%;
+    width: 100%;
     z-index: 10040;
     box-sizing: border-box;
     background: var(--header-bg);
