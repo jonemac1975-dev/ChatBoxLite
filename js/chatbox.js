@@ -418,6 +418,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (modelLabel) modelLabel.textContent = currentModel;
   }
 
+// ==== ADD CLEAR HISTORY BUTTON for MOBILE ====
+if (window.innerWidth <= 768) {
+  const composerActions = document.querySelector(".composer-actions");
+  if (composerActions) {
+    const btn = document.createElement("button");
+    btn.className = "clear-mobile";
+    btn.textContent = "Clear";
+    btn.onclick = () => clearAllSessions();
+    composerActions.prepend(btn);
+  }
+}
+
   initUI();
 
   window._chatbox = {
