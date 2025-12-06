@@ -189,7 +189,7 @@ textarea {
 @media (min-width: 769px) {
   .app { flex-direction: row; }
   .sidebar {
-    width: 260px;
+    width: 240px;
     border-right: 1px solid var(--border-color);
     border-top: none;
   }
@@ -206,17 +206,17 @@ textarea {
   .mobile-logo {
     display: block;
     text-align: center;
-    padding: 5px 0;
+    padding: 3px 0;
     background: #fff;
-    border-radius: 12px;
+    border-radius: 3px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    margin: 8px 12px;
+    margin: 2px 3px;
     z-index: 1000;
   }
 
   .mobile-logo img {
-    width: 65px;
-    height: auto;
+    width: 25px;
+    height: 20%;
   }
 
   /* MAIN lên đầu */
